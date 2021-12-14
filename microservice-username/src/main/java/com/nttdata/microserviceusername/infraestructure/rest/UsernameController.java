@@ -5,6 +5,8 @@ import com.nttdata.microserviceusername.application.UsernameOperations;
 import com.nttdata.microserviceusername.domain.Username;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -14,6 +16,14 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UsernameController {
+
+    @Autowired
+    private CircuitBreakerFactory cbFactory;
+
+
+
+
+
 
     private final UsernameOperations usernameOperations;
 
@@ -25,7 +35,8 @@ public class UsernameController {
 
     @GetMapping("/{id}")
     public Mono<Username> getId(@PathVariable String id) {
-        return usernameOperations.findId(id);
+        return cbFactory.create("items")
+                .run(()-> usernameOperations.findId(id));
     }
 
     @PostMapping("/add")

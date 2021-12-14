@@ -4,6 +4,7 @@ import com.nttdata.microserviceusername.application.UsernameOperations;
 import com.nttdata.microserviceusername.application.model.UsernameRepository;
 import com.nttdata.microserviceusername.domain.Username;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UsernameOperationsImpl implements UsernameOperations {
 
+    @Autowired
     private final UsernameRepository repository;
 
     @Override
